@@ -19,51 +19,6 @@
 ## Exception Handling
 
 
-### Route Errors
-###### [Style [Y112](//github.com/johnpapa/angular-styleguide/tree/master/a1#style-y112)]
-
-  - Handle and log all routing errors using [`$routeChangeError`](https://docs.angularjs.org/api/ngRoute/service/$route#$routeChangeError).
-
-    *Why?*: Provides a consistent way to handle all routing errors.
-
-    *Why?*: Potentially provides a better user experience if a routing error occurs and you route them to a friendly screen with more details or recovery options.
-
-    ```javascript
-    /* recommended */
-    var handlingRouteChangeError = false;
-
-    function handleRoutingErrors() {
-        /**
-         * Route cancellation:
-         * On routing error, go to the dashboard.
-         * Provide an exit clause if it tries to do it twice.
-         */
-        $rootScope.$on('$routeChangeError',
-            function(event, current, previous, rejection) {
-                if (handlingRouteChangeError) { return; }
-                handlingRouteChangeError = true;
-                var destination = (current && (current.title ||
-                    current.name || current.loadedTemplateUrl)) ||
-                    'unknown target';
-                var msg = 'Error routing to ' + destination + '. ' +
-                    (rejection.msg || '');
-
-                /**
-                 * Optionally log using a custom service or $log.
-                 * (Don't forget to inject custom service)
-                 */
-                logger.warning(msg, [current]);
-
-                /**
-                 * On routing error, go to another route/state.
-                 */
-                $location.path('/');
-
-            }
-        );
-    }
-    ```
-
 
 
 ## Naming
@@ -597,21 +552,7 @@
 
 
 
-## Angular $ Wrapper Services
 
-### $document and $window
-###### [Style [Y180](//github.com/johnpapa/angular-styleguide/tree/master/a1#style-y180)]
-
-  - Use [`$document`](https://docs.angularjs.org/api/ng/service/$document) and [`$window`](https://docs.angularjs.org/api/ng/service/$window) instead of `document` and `window`.
-
-    *Why?*: These services are wrapped by Angular and more easily testable than using document and window in tests. This helps you avoid having to mock document and window yourself.
-
-### $timeout and $interval
-###### [Style [Y181](//github.com/johnpapa/angular-styleguide/tree/master/a1#style-y181)]
-
-  - Use [`$timeout`](https://docs.angularjs.org/api/ng/service/$timeout) and [`$interval`](https://docs.angularjs.org/api/ng/service/$interval) instead of `setTimeout` and `setInterval` .
-
-    *Why?*: These services are wrapped by Angular and more easily testable and handle Angular's digest cycle thus keeping data binding in sync.
 
 
 
@@ -1060,31 +1001,6 @@ Unit testing helps maintain clean code, as such I included some of my recommenda
             .constant('toastr', toastr)
             .constant('moment', moment);
     })();
-    ```
-
-###### [Style [Y241](//github.com/johnpapa/angular-styleguide/tree/master/a1#style-y241)]
-
-  - Use constants for values that do not change and do not come from another service. When constants are used only for a module that may be reused in multiple applications, place constants in a file per module named after the module. Until this is required, keep constants in the main module in a `constants.js` file.
-
-    *Why?*: A value that may change, even infrequently, should be retrieved from a service so you do not have to change the source code. For example, a url for a data service could be placed in a constants but a better place would be to load it from a web service.
-
-    *Why?*: Constants can be injected into any angular component, including providers.
-
-    *Why?*: When an application is separated into modules that may be reused in other applications, each stand-alone module should be able to operate on its own including any dependent constants.
-
-    ```javascript
-    // Constants used by the entire app
-    angular
-        .module('app.core')
-        .constant('moment', moment);
-
-    // Constants used only by the sales module
-    angular
-        .module('app.sales')
-        .constant('events', {
-            ORDER_CREATED: 'event_order_created',
-            INVENTORY_DEPLETED: 'event_inventory_depleted'
-        });
     ```
 
 
