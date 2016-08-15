@@ -45,11 +45,14 @@ Rules which are not based on the guide by john_papa should contain an explanatio
   
   
 # Custom Conventions
+## Naming
+  **input** discuss global naming rules
+
 
 ## Files
   - Put directives and utilities into a module
-  - The entry point of a module is always named index.js
-  - Put directives, controllers, components, services, .... in a single file
+  - The entry point of a module is always named `index.js`
+  - Put directives, controllers, components, services, .... in a single file. Do not combine multiple aspects in one file.
 
 ## AFP Components
   - Define the dependency as angular.module('app', ['afp-widgets'] ) without any `require('afp-widgets')`
@@ -100,6 +103,7 @@ Rules which are not based on the guide by john_papa should contain an explanatio
 
 
 # Standard rules
+
 
 ## Single Responsibility
 
@@ -520,12 +524,50 @@ Rules which are not based on the guide by john_papa should contain an explanatio
   - The `catch` block of a promise must return a rejected promise to maintain the exception in the promise chain.
   - Always handle exceptions in services/factories.
   - Make use of global exception handler modules, if possible (or start one!)
+  - When in doubt, define the dependencies manually. See [Style [Y092](//github.com/johnpapa/angular-styleguide/tree/master/a1#style-y092)], [Style [Y082](//github.com/johnpapa/angular-styleguide/tree/master/a1#style-y082)]
 
 
 
 
+## Exception Handling
+
+###### Decorators [Style [Y110](//github.com/johnpapa/angular-styleguide/tree/master/a1#style-y110)]
+ **input** we should do this and make a rule to include some SB-core module. It's the same technique as the http-logger interceptor.
+ **input** discuss exception and error handling in general
+ 
+- Use a [decorator](https://docs.angularjs.org/api/auto/service/$provide#decorator), at config time using the [`$provide`](https://docs.angularjs.org/api/auto/service/$provide) service, on the [`$exceptionHandler`](https://docs.angularjs.org/api/ng/service/$exceptionHandler) service to perform custom actions when exceptions occur.
 
 
+###### Exception Catchers [Style [Y111](//github.com/johnpapa/angular-styleguide/tree/master/a1#style-y111)]
+**input** discuss exception and error handling in general
+  - Create a factory that exposes an interface to catch and gracefully handle exceptions.
 
 
+###### Route Errors [Style [Y112](//github.com/johnpapa/angular-styleguide/tree/master/a1#style-y112)]
+**input** discuss exception and error handling in general
+  - Handle and log all routing errors using [`$routeChangeError`](https://docs.angularjs.org/api/ngRoute/service/$route#$routeChangeError).
 
+  
+
+
+## Angular $ Wrapper Services
+
+######  $document and $window [Style [Y180](//github.com/johnpapa/angular-styleguide/tree/master/a1#style-y180)]
+
+  - Use [`$document`](https://docs.angularjs.org/api/ng/service/$document) and [`$window`](https://docs.angularjs.org/api/ng/service/$window) instead of `document` and `window`.
+
+###### $timeout and $interval [Style [Y181](//github.com/johnpapa/angular-styleguide/tree/master/a1#style-y181)]
+
+  - Use [`$timeout`](https://docs.angularjs.org/api/ng/service/$timeout) and [`$interval`](https://docs.angularjs.org/api/ng/service/$interval) instead of `setTimeout` and `setInterval` .
+
+###### $log [CUSTOM]
+ - Use `$log` instead of `console.log`
+
+*WHY* Older browsers (eg IE8) do not support console.log (or not always) and it can break your code
+*WHY* the $log interface is cleaner (you can even differentiate between warn,debug,error!)
+
+
+## Constants
+
+###### Constant Values [Style [Y241](//github.com/johnpapa/angular-styleguide/tree/master/a1#style-y241)]
+  - Use constants for values that do not change and do not come from another service. When constants are used only for a module that may be reused in multiple applications, place constants in a file per module named after the module. Until this is required, keep constants in the main module in a `constants.js` file.
