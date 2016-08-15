@@ -13,35 +13,16 @@ Rules which are not based on the guide by john_papa should contain an explanatio
 ## Table of Contents
   1. [Custom Conventions](#custom-conventions)
   1. [Single Responsibility](#single-responsibility)
-  1. [IIFE](#iife)
   1. [Modules](#modules)
   1. [Controllers](#controllers)
-  1. [Services](#services)
-  1. [Factories](#factories)
   1. [Data Services](#data-services)
   1. [Directives](#directives)
   1. [Resolving Promises](#resolving-promises)
-  1. [Manual Annotating for Dependency Injection](#manual-annotating-for-dependency-injection)
-  1. [Minification and Annotation](#minification-and-annotation)
   1. [Exception Handling](#exception-handling)
   1. [Naming](#naming)
-  1. [Application Structure LIFT Principle](#application-structure-lift-principle)
-  1. [Application Structure](#application-structure)
-  1. [Modularity](#modularity)
-  1. [Startup Logic](#startup-logic)
   1. [Angular $ Wrapper Services](#angular--wrapper-services)
-  1. [Testing](#testing)
-  1. [Animations](#animations)
-  1. [Comments](#comments)
-  1. [JSHint](#js-hint)
-  1. [JSCS](#jscs)
   1. [Constants](#constants)
-  1. [File Templates and Snippets](#file-templates-and-snippets)
-  1. [Yeoman Generator](#yeoman-generator)
-  1. [Routing](#routing)
-  1. [Task Automation](#task-automation)
-  1. [Filters](#filters)
-  1. [Angular Docs](#angular-docs)
+
   
   
 # Custom Conventions
@@ -107,24 +88,24 @@ Rules which are not based on the guide by john_papa should contain an explanatio
 
 ## Single Responsibility
 
-###### Rule of 1 [Style [Y001](//github.com/johnpapa/angular-styleguide/tree/master/a1#style-y001)]
+#### Rule of 1 [Style [Y001](//github.com/johnpapa/angular-styleguide/tree/master/a1#style-y001)]
 
   - Define 1 component per file, recommended to be less than 400 lines of code.
 
-###### Small Functions [Style [Y002](//github.com/johnpapa/angular-styleguide/tree/master/a1#style-y002)]
+#### Small Functions [Style [Y002](//github.com/johnpapa/angular-styleguide/tree/master/a1#style-y002)]
 
   - Define small functions, no more than 75 LOC (less is better).
 
 
 ## Modules
 
-###### Avoid Naming Collisions [Style [Y020](//github.com/johnpapa/angular-styleguide/tree/master/a1#style-y020)]
+#### Avoid Naming Collisions [Style [Y020](//github.com/johnpapa/angular-styleguide/tree/master/a1#style-y020)]
   - Use unique naming conventions with separators for sub-modules.
   
   For example `app` may be your root module while `app.dashboard` may be a sub-module or component.
   
 
-###### Definitions [Style [Y021](//github.com/johnpapa/angular-styleguide/tree/master/a1#style-y021)],  [Style [Y022](//github.com/johnpapa/angular-styleguide/tree/master/a1#style-y022)] and [Style [Y023](//github.com/johnpapa/angular-styleguide/tree/master/a1#style-y023)]
+#### Definitions [Style [Y021](//github.com/johnpapa/angular-styleguide/tree/master/a1#style-y021)],  [Style [Y022](//github.com/johnpapa/angular-styleguide/tree/master/a1#style-y022)] and [Style [Y023](//github.com/johnpapa/angular-styleguide/tree/master/a1#style-y023)]
 
   - Declare modules once (in index.js) without a variable using the setter syntax. Use the getter syntax in partials.
   - When using a module, avoid using a variable and instead use chaining with the getter syntax.
@@ -145,7 +126,7 @@ Rules which are not based on the guide by john_papa should contain an explanatio
   ```
 
 
-###### Named vs Anonymous Functions [Style [Y024](//github.com/johnpapa/angular-styleguide/tree/master/a1#style-y024)]
+#### Named vs Anonymous Functions [Style [Y024](//github.com/johnpapa/angular-styleguide/tree/master/a1#style-y024)]
 
   - Use named functions instead of passing an anonymous function in as a callback.
 
@@ -169,11 +150,11 @@ Rules which are not based on the guide by john_papa should contain an explanatio
 
 ## Controllers
 
-###### Keep Controllers Focused [Style [Y037](//github.com/johnpapa/angular-styleguide/tree/master/a1#style-y037)]
+#### Keep Controllers Focused [Style [Y037](//github.com/johnpapa/angular-styleguide/tree/master/a1#style-y037)]
   - Define an controller for a view
   - Do not reuse the controller for other views. Move reusable logic to factories and keep the controller simple and focused on its view.
 
-###### controllerAs *View* Syntax [Style [Y030](//github.com/johnpapa/angular-styleguide/tree/master/a1#style-y030)]
+#### controllerAs *View* Syntax [Style [Y030](//github.com/johnpapa/angular-styleguide/tree/master/a1#style-y030)]
 
   - Use the [`controllerAs`](http://www.johnpapa.net/do-you-like-your-angular-controllers-with-or-without-sugar/) syntax over the `classic controller with $scope` syntax.
 
@@ -191,7 +172,7 @@ Rules which are not based on the guide by john_papa should contain an explanatio
   </div>
   ```  
  
-###### controllerAs *router* Syntax [CUST01] and [Style [Y038](//github.com/johnpapa/angular-styleguide/tree/master/a1#style-y038)]
+#### controllerAs *router* Syntax [CUST01] and [Style [Y038](//github.com/johnpapa/angular-styleguide/tree/master/a1#style-y038)]
   - Use controllerAs on directives and ui.router states
   - Define controllers along with their routes.
 
@@ -217,7 +198,7 @@ Rules which are not based on the guide by john_papa should contain an explanatio
   ``` 
 
   
-###### controllerAs *Controller* Syntax [Style [Y031](//github.com/johnpapa/angular-styleguide/tree/master/a1#style-y031)]
+#### controllerAs *Controller* Syntax [Style [Y031](//github.com/johnpapa/angular-styleguide/tree/master/a1#style-y031)]
 
   - Use the `controllerAs` syntax over the `classic controller with $scope` syntax.
   - The `controllerAs` syntax uses `this` inside controllers which gets bound to `$scope`
@@ -239,7 +220,7 @@ Rules which are not based on the guide by john_papa should contain an explanatio
   }
   ```
 
-###### controllerAs with vm [Style [Y032](//github.com/johnpapa/angular-styleguide/tree/master/a1#style-y032)]
+#### controllerAs with vm [Style [Y032](//github.com/johnpapa/angular-styleguide/tree/master/a1#style-y032)]
   **input** naming? suggestion: use Ctrl
   - Use a capture variable for `this` when using the `controllerAs` syntax. Choose a consistent variable name such as `vm`, which stands for ViewModel.
 
@@ -277,7 +258,7 @@ Rules which are not based on the guide by john_papa should contain an explanatio
   <input ng-model="productVm.title">
   ```
 
-###### Bindable Members Up Top [Style [Y033](//github.com/johnpapa/angular-styleguide/tree/master/a1#style-y033)]
+#### Bindable Members Up Top [Style [Y033](//github.com/johnpapa/angular-styleguide/tree/master/a1#style-y033)]
   **input** discuss usefulness. Bonus: It will be very easy to migrate to ES6
   - Place bindable members at the top of the controller, alphabetized, and not spread through the controller code.
 
@@ -320,7 +301,7 @@ Rules which are not based on the guide by john_papa should contain an explanatio
   ```
 
 
-###### Function Declarations to Hide Implementation Details [Style [Y034](//github.com/johnpapa/angular-styleguide/tree/master/a1#style-y034)]
+#### Function Declarations to Hide Implementation Details [Style [Y034](//github.com/johnpapa/angular-styleguide/tree/master/a1#style-y034)]
 
   - Use function declarations to hide implementation details. 
   - Keep your bindable members up top. 
@@ -394,7 +375,7 @@ Rules which are not based on the guide by john_papa should contain an explanatio
   }
   ```
 
-###### Controller Activation Promises [Style [Y080](//github.com/johnpapa/angular-styleguide/tree/master/a1#style-y080)]
+#### Controller Activation Promises [Style [Y080](//github.com/johnpapa/angular-styleguide/tree/master/a1#style-y080)]
 
   - Resolve start-up logic for a controller in an `activate` function.
 
@@ -413,7 +394,7 @@ Rules which are not based on the guide by john_papa should contain an explanatio
   }
   ```  
 
-###### Defer Controller Logic to Services [Style [Y035](//github.com/johnpapa/angular-styleguide/tree/master/a1#style-y035)]
+#### Defer Controller Logic to Services [Style [Y035](//github.com/johnpapa/angular-styleguide/tree/master/a1#style-y035)]
 
   - Defer logic in a controller by delegating to services and factories.
 
@@ -436,30 +417,30 @@ Rules which are not based on the guide by john_papa should contain an explanatio
 ## Data Services
 
 
-###### Separate Data Calls [Style [Y060](//github.com/johnpapa/angular-styleguide/tree/master/a1#style-y060)]
+#### Separate Data Calls [Style [Y060](//github.com/johnpapa/angular-styleguide/tree/master/a1#style-y060)]
 
   - Refactor logic for making data operations and interacting with data to a factory. Make data services responsible for XHR calls, local storage, stashing in memory, or any other data operations.
   - Place caching functionality into the service instead of repeating it in every controller
 
 
-###### Return a Promise from Data Calls [Style [Y061](//github.com/johnpapa/angular-styleguide/tree/master/a1#style-y061)]
+#### Return a Promise from Data Calls [Style [Y061](//github.com/johnpapa/angular-styleguide/tree/master/a1#style-y061)]
 
   - When calling a data service that returns a promise such as `$http`, return a promise in your calling function too.
 
 
 
 ## Directives
-###### Provide a Unique Directive Prefix [Style [Y073](//github.com/johnpapa/angular-styleguide/tree/master/a1#style-y073)]
+#### Provide a Unique Directive Prefix [Style [Y073](//github.com/johnpapa/angular-styleguide/tree/master/a1#style-y073)]
   **input** define sb prefix!
   
   - Provide a short, unique and descriptive directive prefix such as `acmeSalesCustomerInfo` which would be declared in HTML as `acme-sales-customer-info`.
 
-###### Restrict to Elements and Attributes [Style [Y074](//github.com/johnpapa/angular-styleguide/tree/master/a1#style-y074)]
+#### Restrict to Elements and Attributes [Style [Y074](//github.com/johnpapa/angular-styleguide/tree/master/a1#style-y074)]
   - Never use `C` (CSS class)
   - When creating a directive that makes sense as a stand-alone element, allow restrict `E` (custom element) and optionally restrict `A` (custom attribute). Generally, if it could be its own control, `E` is appropriate. General guideline is allow `EA` but lean towards implementing as an element when it's stand-alone and as an attribute when it enhances its existing DOM element.
 
 
-###### Directives and ControllerAs [Style [Y075](//github.com/johnpapa/angular-styleguide/tree/master/a1#style-y075)]
+#### Directives and ControllerAs [Style [Y075](//github.com/johnpapa/angular-styleguide/tree/master/a1#style-y075)]
   - Use `controller as` syntax with a directive to be consistent with using `controller as` with view and controller pairings.
   - Bonus: It's easy to see when you accidentally access an variable which does not belong to the directive's scope
   - Using an controller splits the bootstrapping and the interactive features (event handlers) in two parts (controller and linkFunc). You might even be able to skip the linkFunc entirely.
@@ -505,21 +486,21 @@ Rules which are not based on the guide by john_papa should contain an explanatio
   <div>max={{vm.max}}</div>  <div>min={{vm.min}}</div>
   ```
 
-###### [Style [Y076](//github.com/johnpapa/angular-styleguide/tree/master/a1#style-y076)]
+#### [Style [Y076](//github.com/johnpapa/angular-styleguide/tree/master/a1#style-y076)]
 
   - Use `bindToController = true` when using `controller as` syntax with a directive when you want to bind the outer scope to the directive's controller's scope.
 
 
 ## Resolving Promises
 
-###### Route Resolve Promises [Style [Y081](//github.com/johnpapa/angular-styleguide/tree/master/a1#style-y081)]
+#### Route Resolve Promises [Style [Y081](//github.com/johnpapa/angular-styleguide/tree/master/a1#style-y081)]
 
   - When a controller depends on a promise to be resolved before the controller is activated, resolve those dependencies in the `$routeProvider` before the controller logic is executed. If you need to conditionally cancel a route before the controller is activated, use a route resolver.
   - Use a route resolve when you want to decide to cancel the route before ever transitioning to the View.
   - If the code of the route resolve is slow and the view can already show some of the data, an controller activation function might be more suitable
 
 
-###### Handling Exceptions with Promises [Style [Y082](//github.com/johnpapa/angular-styleguide/tree/master/a1#style-y082)]
+#### Handling Exceptions with Promises [Style [Y082](//github.com/johnpapa/angular-styleguide/tree/master/a1#style-y082)]
 
   - The `catch` block of a promise must return a rejected promise to maintain the exception in the promise chain.
   - Always handle exceptions in services/factories.
@@ -531,19 +512,19 @@ Rules which are not based on the guide by john_papa should contain an explanatio
 
 ## Exception Handling
 
-###### Decorators [Style [Y110](//github.com/johnpapa/angular-styleguide/tree/master/a1#style-y110)]
+#### Decorators [Style [Y110](//github.com/johnpapa/angular-styleguide/tree/master/a1#style-y110)]
  **input** we should do this and make a rule to include some SB-core module. It's the same technique as the http-logger interceptor.
  **input** discuss exception and error handling in general
  
 - Use a [decorator](https://docs.angularjs.org/api/auto/service/$provide#decorator), at config time using the [`$provide`](https://docs.angularjs.org/api/auto/service/$provide) service, on the [`$exceptionHandler`](https://docs.angularjs.org/api/ng/service/$exceptionHandler) service to perform custom actions when exceptions occur.
 
 
-###### Exception Catchers [Style [Y111](//github.com/johnpapa/angular-styleguide/tree/master/a1#style-y111)]
+#### Exception Catchers [Style [Y111](//github.com/johnpapa/angular-styleguide/tree/master/a1#style-y111)]
 **input** discuss exception and error handling in general
   - Create a factory that exposes an interface to catch and gracefully handle exceptions.
 
 
-###### Route Errors [Style [Y112](//github.com/johnpapa/angular-styleguide/tree/master/a1#style-y112)]
+#### Route Errors [Style [Y112](//github.com/johnpapa/angular-styleguide/tree/master/a1#style-y112)]
 **input** discuss exception and error handling in general
   - Handle and log all routing errors using [`$routeChangeError`](https://docs.angularjs.org/api/ngRoute/service/$route#$routeChangeError).
 
@@ -552,15 +533,15 @@ Rules which are not based on the guide by john_papa should contain an explanatio
 
 ## Angular $ Wrapper Services
 
-######  $document and $window [Style [Y180](//github.com/johnpapa/angular-styleguide/tree/master/a1#style-y180)]
+####  $document and $window [Style [Y180](//github.com/johnpapa/angular-styleguide/tree/master/a1#style-y180)]
 
   - Use [`$document`](https://docs.angularjs.org/api/ng/service/$document) and [`$window`](https://docs.angularjs.org/api/ng/service/$window) instead of `document` and `window`.
 
-###### $timeout and $interval [Style [Y181](//github.com/johnpapa/angular-styleguide/tree/master/a1#style-y181)]
+#### $timeout and $interval [Style [Y181](//github.com/johnpapa/angular-styleguide/tree/master/a1#style-y181)]
 
   - Use [`$timeout`](https://docs.angularjs.org/api/ng/service/$timeout) and [`$interval`](https://docs.angularjs.org/api/ng/service/$interval) instead of `setTimeout` and `setInterval` .
 
-###### $log [CUSTOM]
+#### $log [CUSTOM]
  - Use `$log` instead of `console.log`
 
 *WHY* Older browsers (eg IE8) do not support console.log (or not always) and it can break your code
@@ -569,5 +550,5 @@ Rules which are not based on the guide by john_papa should contain an explanatio
 
 ## Constants
 
-###### Constant Values [Style [Y241](//github.com/johnpapa/angular-styleguide/tree/master/a1#style-y241)]
+#### Constant Values [Style [Y241](//github.com/johnpapa/angular-styleguide/tree/master/a1#style-y241)]
   - Use constants for values that do not change and do not come from another service. When constants are used only for a module that may be reused in multiple applications, place constants in a file per module named after the module. Until this is required, keep constants in the main module in a `constants.js` file.
