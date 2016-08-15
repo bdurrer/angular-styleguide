@@ -5,6 +5,111 @@ This file contains the rules which we think are not all too important or somehow
 However, they are not considered wrong and it's good to know them (and it certainly does not hurt to follow them).
 
 
+## Directives
+
+### Limit 1 Per File
+###### [Style [Y070](//github.com/johnpapa/angular-styleguide/tree/master/a1#style-y070)]
+
+  - Create one directive per file. Name the file for the directive.
+
+    *Why?*: It is easy to mash all the directives in one file, but difficult to then break those out so some are shared across apps, some across modules, some just for one module.
+
+    *Why?*: One directive per file is easy to maintain.
+
+    > Note: "**Best Practice**: Directives should clean up after themselves. You can use `element.on('$destroy', ...)` or `scope.$on('$destroy', ...)` to run a clean-up function when the directive is removed" ... from the Angular documentation.
+
+  ```javascript
+  /* avoid */
+  /* directives.js */
+
+  angular
+      .module('app.widgets')
+
+      /* order directive that is specific to the order module */
+      .directive('orderCalendarRange', orderCalendarRange)
+
+      /* sales directive that can be used anywhere across the sales app */
+      .directive('salesCustomerInfo', salesCustomerInfo)
+
+      /* spinner directive that can be used anywhere across apps */
+      .directive('sharedSpinner', sharedSpinner);
+
+  function orderCalendarRange() {
+      /* implementation details */
+  }
+
+  function salesCustomerInfo() {
+      /* implementation details */
+  }
+
+  function sharedSpinner() {
+      /* implementation details */
+  }
+  ```
+
+  ```javascript
+  /* recommended */
+  /* calendar-range.directive.js */
+
+  /**
+   * @desc order directive that is specific to the order module at a company named Acme
+   * @example <div acme-order-calendar-range></div>
+   */
+  angular
+      .module('sales.order')
+      .directive('acmeOrderCalendarRange', orderCalendarRange);
+
+  function orderCalendarRange() {
+      /* implementation details */
+  }
+  ```
+
+  ```javascript
+  /* recommended */
+  /* customer-info.directive.js */
+
+  /**
+   * @desc sales directive that can be used anywhere across the sales app at a company named Acme
+   * @example <div acme-sales-customer-info></div>
+   */
+  angular
+      .module('sales.widgets')
+      .directive('acmeSalesCustomerInfo', salesCustomerInfo);
+
+  function salesCustomerInfo() {
+      /* implementation details */
+  }
+  ```
+
+  ```javascript
+  /* recommended */
+  /* spinner.directive.js */
+
+  /**
+   * @desc spinner directive that can be used anywhere across apps at a company named Acme
+   * @example <div acme-shared-spinner></div>
+   */
+  angular
+      .module('shared.widgets')
+      .directive('acmeSharedSpinner', sharedSpinner);
+
+  function sharedSpinner() {
+      /* implementation details */
+  }
+  ```
+
+    Note: There are many naming options for directives, especially since they can be used in narrow or wide scopes. Choose one that makes the directive and its file name distinct and clear. Some examples are below, but see the [Naming](//github.com/johnpapa/angular-styleguide/tree/master/a1#naming) section for more recommendations.
+
+### Manipulate DOM in a Directive
+###### [Style [Y072](//github.com/johnpapa/angular-styleguide/tree/master/a1#style-y072)]
+
+  - When manipulating the DOM directly, use a directive. If alternative ways can be used such as using CSS to set styles or the [animation services](https://docs.angularjs.org/api/ngAnimate), Angular templating, [`ngShow`](https://docs.angularjs.org/api/ng/directive/ngShow) or [`ngHide`](https://docs.angularjs.org/api/ng/directive/ngHide), then use those instead. For example, if the directive simply hides and shows, use ngHide/ngShow.
+
+    *Why?*: DOM manipulation can be difficult to test, debug, and there are often better ways (e.g. CSS, animations, templates)
+
+
+
+
 
 
 ## Services
