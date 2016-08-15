@@ -44,21 +44,22 @@ Rules which are not based on the guide by john_papa should contain an explanatio
   1. [Angular Docs](#angular-docs)
   
   
-## Custom Conventions
+# Custom Conventions
 
-### Files
+## Files
   - Put directives and utilities into a module
   - The entry point of a module is always named index.js
   - Put directives, controllers, components, services, .... in a single file
 
-### AFP Components
+## AFP Components
   - Define the dependency as angular.module('app', ['afp-widgets'] ) without any `require('afp-widgets')`
   - Include the `global-loader.js` in your banklet
   
   *Why?* The AFP components have an very large dependency tree and are used everywhere. We placed the commonly-used modules in `global.js` and load it using the `global-loader.js`
   Since we cannot control the webpack build (yet), simply do not reference it with `require()`.
 
-### Webpack
+## Webpack
+### Atomic files
   - Partial files of modules should be atomic, if possible
   - Angular partials should register themself and export the angular module
   
@@ -89,6 +90,16 @@ Rules which are not based on the guide by john_papa should contain an explanatio
   angular.module('mymodule',[]);
   require('./controller.js');
   ```
+
+### UnSafe from Minification [Style [Y090](//github.com/johnpapa/angular-styleguide/tree/master/a1#style-y090)]
+
+  We have an Angular-Injection loader in Webpack integrated. However, when you don't follow the rule about partials, it might not detect your controller/factory/service
+
+  - Avoid using the shortcut syntax of declaring dependencies without using a minification-safe approach.
+  - When in doubt, place the marker statement `"ngInject";` the first statement of your function
+
+
+# Standard rules
 
 ## Single Responsibility
 
@@ -239,28 +250,14 @@ Rules which are not based on the guide by john_papa should contain an explanatio
   }
   ```
 
-  Note: You can avoid any [jshint](http://jshint.com/) warnings by placing the comment above the line of code. However it is not needed when the function is named using UpperCasing, as this convention means it is a constructor function, which is what a controller is in Angular.
-
-  ```javascript
-  /* jshint validthis: true */
-  var vm = this;
-  ```
-
   Note: When creating watches in a controller using `controller as`, you can watch the `vm.*` member using the following syntax. (Create watches with caution as they add more load to the digest cycle.)
-
-  ```html
-  <input ng-model="vm.title"/>
-  ```
 
   ```javascript
   function SomeController($scope, $log) {
       var vm = this;
       vm.title = 'Some Title';
 
-      $scope.$watch('vm.title', function(current, original) {
-          $log.info('vm.title was %s', original);
-          $log.info('vm.title is now %s', current);
-      });
+      $scope.$watch('vm.title', function(current, original) { ... });
   }
   ```
 
@@ -321,7 +318,9 @@ Rules which are not based on the guide by john_papa should contain an explanatio
 
 ###### Function Declarations to Hide Implementation Details [Style [Y034](//github.com/johnpapa/angular-styleguide/tree/master/a1#style-y034)]
 
-  - Use function declarations to hide implementation details. Keep your bindable members up top. When you need to bind a function in a controller, point it to a function declaration that appears later in the file. This is tied directly to the section Bindable Members Up Top. For more details see [this post](http://www.johnpapa.net/angular-function-declarations-function-expressions-and-readable-code/).
+  - Use function declarations to hide implementation details. 
+  - Keep your bindable members up top. 
+  - When you need to bind a function in a controller, point it to a function declaration that appears later in the file. This is tied directly to the section [Bindable Members Up Top](#bindable-members-up-top).
 
     *Why?*: Placing bindable members at the top makes it easy to read and helps you instantly identify which members of the controller can be bound and used in the View. (Same as above.)
 
@@ -362,8 +361,6 @@ Rules which are not based on the guide by john_papa should contain an explanatio
   }
   ```
 
-  Notice that the important stuff is scattered in the preceding example. In the example below, notice that the important stuff is up top. For example, the members bound to the controller such as `vm.avengers` and `vm.title`. The implementation details are down below. This is just easier to read.
-
   ```javascript
   /*
    * recommend
@@ -393,6 +390,25 @@ Rules which are not based on the guide by john_papa should contain an explanatio
   }
   ```
 
+###### Controller Activation Promises [Style [Y080](//github.com/johnpapa/angular-styleguide/tree/master/a1#style-y080)]
+
+  - Resolve start-up logic for a controller in an `activate` function.
+
+  ```javascript
+  /* recommended */
+  function AvengersController(dataservice) {
+      var vm = this;
+      vm.title = 'Avengers';
+
+      activate();
+
+      ////////////
+
+      function activate() {
+      }
+  }
+  ```  
+
 ###### Defer Controller Logic to Services [Style [Y035](//github.com/johnpapa/angular-styleguide/tree/master/a1#style-y035)]
 
   - Defer logic in a controller by delegating to services and factories.
@@ -413,172 +429,19 @@ Rules which are not based on the guide by john_papa should contain an explanatio
   }
   ```
 
-  
-  
-  
-# Semi-Important stuff
-
-
-## Services
-
-### Singletons [Style [Y040](//github.com/johnpapa/angular-styleguide/tree/master/a1#style-y040)]
-  **input** discuss
-
-  - Services are instantiated with the `new` keyword, use `this` for public methods and variables. Since these are so similar to factories, use a factory instead for consistency.
-
-    Note: [All Angular services are singletons](https://docs.angularjs.org/guide/services). This means that there is only one instance of a given service per injector.
-
-  ```javascript
-  // service
-  angular
-      .module('app')
-      .service('logger', logger);
-
-  function logger() {
-    this.logError = function(msg) {
-      /* */
-    };
-  }
-  ```
-
-  ```javascript
-  // factory
-  angular
-      .module('app')
-      .factory('logger', logger);
-
-  function logger() {
-      return {
-          logError: function(msg) {
-            /* */
-          }
-     };
-  }
-  ```
-
-
 ## Data Services
 
-### Separate Data Calls
-###### [Style [Y060](//github.com/johnpapa/angular-styleguide/tree/master/a1#style-y060)]
+
+###### Separate Data Calls [Style [Y060](//github.com/johnpapa/angular-styleguide/tree/master/a1#style-y060)]
 
   - Refactor logic for making data operations and interacting with data to a factory. Make data services responsible for XHR calls, local storage, stashing in memory, or any other data operations.
+  - Place caching functionality into the service instead of repeating it in every controller
 
-    *Why?*: The controller's responsibility is for the presentation and gathering of information for the view. It should not care how it gets the data, just that it knows who to ask for it. Separating the data services moves the logic on how to get it to the data service, and lets the controller be simpler and more focused on the view.
 
-    *Why?*: This makes it easier to test (mock or real) the data calls when testing a controller that uses a data service.
-
-    *Why?*: Data service implementation may have very specific code to handle the data repository. This may include headers, how to talk to the data, or other services such as `$http`. Separating the logic into a data service encapsulates this logic in a single place hiding the implementation from the outside consumers (perhaps a controller), also making it easier to change the implementation.
-
-  ```javascript
-  /* recommended */
-
-  // dataservice factory
-  angular
-      .module('app.core')
-      .factory('dataservice', dataservice);
-
-  dataservice.$inject = ['$http', 'logger'];
-
-  function dataservice($http, logger) {
-      return {
-          getAvengers: getAvengers
-      };
-
-      function getAvengers() {
-          return $http.get('/api/maa')
-              .then(getAvengersComplete)
-              .catch(getAvengersFailed);
-
-          function getAvengersComplete(response) {
-              return response.data.results;
-          }
-
-          function getAvengersFailed(error) {
-              logger.error('XHR Failed for getAvengers.' + error.data);
-          }
-      }
-  }
-  ```
-
-    Note: The data service is called from consumers, such as a controller, hiding the implementation from the consumers, as shown below.
-
-  ```javascript
-  /* recommended */
-
-  // controller calling the dataservice factory
-  angular
-      .module('app.avengers')
-      .controller('AvengersController', AvengersController);
-
-  AvengersController.$inject = ['dataservice', 'logger'];
-
-  function AvengersController(dataservice, logger) {
-      var vm = this;
-      vm.avengers = [];
-
-      activate();
-
-      function activate() {
-          return getAvengers().then(function() {
-              logger.info('Activated Avengers View');
-          });
-      }
-
-      function getAvengers() {
-          return dataservice.getAvengers()
-              .then(function(data) {
-                  vm.avengers = data;
-                  return vm.avengers;
-              });
-      }
-  }
-  ```
-
-### Return a Promise from Data Calls
-###### [Style [Y061](//github.com/johnpapa/angular-styleguide/tree/master/a1#style-y061)]
+###### Return a Promise from Data Calls [Style [Y061](//github.com/johnpapa/angular-styleguide/tree/master/a1#style-y061)]
 
   - When calling a data service that returns a promise such as `$http`, return a promise in your calling function too.
 
-    *Why?*: You can chain the promises together and take further action after the data call completes and resolves or rejects the promise.
-
-  ```javascript
-  /* recommended */
-
-  activate();
-
-  function activate() {
-      /**
-       * Step 1
-       * Ask the getAvengers function for the
-       * avenger data and wait for the promise
-       */
-      return getAvengers().then(function() {
-          /**
-           * Step 4
-           * Perform an action on resolve of final promise
-           */
-          logger.info('Activated Avengers View');
-      });
-  }
-
-  function getAvengers() {
-        /**
-         * Step 2
-         * Ask the data service for the data and wait
-         * for the promise
-         */
-        return dataservice.getAvengers()
-            .then(function(data) {
-                /**
-                 * Step 3
-                 * set the data and resolve the promise
-                 */
-                vm.avengers = data;
-                return vm.avengers;
-        });
-  }
-  ```
 
 
 ## Directives
@@ -637,3 +500,32 @@ Rules which are not based on the guide by john_papa should contain an explanatio
   <!-- directive.html -->
   <div>max={{vm.max}}</div>  <div>min={{vm.min}}</div>
   ```
+
+###### [Style [Y076](//github.com/johnpapa/angular-styleguide/tree/master/a1#style-y076)]
+
+  - Use `bindToController = true` when using `controller as` syntax with a directive when you want to bind the outer scope to the directive's controller's scope.
+
+
+## Resolving Promises
+
+###### Route Resolve Promises [Style [Y081](//github.com/johnpapa/angular-styleguide/tree/master/a1#style-y081)]
+
+  - When a controller depends on a promise to be resolved before the controller is activated, resolve those dependencies in the `$routeProvider` before the controller logic is executed. If you need to conditionally cancel a route before the controller is activated, use a route resolver.
+  - Use a route resolve when you want to decide to cancel the route before ever transitioning to the View.
+  - If the code of the route resolve is slow and the view can already show some of the data, an controller activation function might be more suitable
+
+
+###### Handling Exceptions with Promises [Style [Y082](//github.com/johnpapa/angular-styleguide/tree/master/a1#style-y082)]
+
+  - The `catch` block of a promise must return a rejected promise to maintain the exception in the promise chain.
+  - Always handle exceptions in services/factories.
+  - Make use of global exception handler modules, if possible (or start one!)
+
+
+
+
+
+
+
+
+
