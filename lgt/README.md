@@ -10,8 +10,13 @@ Therefore we usually skip the explanation and link to the original style rules b
 Rules which are not based on the guide by john_papa should contain an explanation and a code sample
 
 
-## Table of Contents
-  1. [Custom Conventions](#custom-conventions)
+## Custom rules
+  1. [Naming](#naming)
+  1. [Files](#files)
+  1. [AFP Components](#afp-components)
+  1. [Webpack](#webpack)
+
+## General rules
   1. [Single Responsibility](#single-responsibility)
   1. [Modules](#modules)
   1. [Controllers](#controllers)
@@ -19,7 +24,6 @@ Rules which are not based on the guide by john_papa should contain an explanatio
   1. [Directives](#directives)
   1. [Resolving Promises](#resolving-promises)
   1. [Exception Handling](#exception-handling)
-  1. [Naming](#naming)
   1. [Angular $ Wrapper Services](#angular--wrapper-services)
   1. [Constants](#constants)
 
@@ -83,7 +87,7 @@ Rules which are not based on the guide by john_papa should contain an explanatio
   - When in doubt, place the marker statement `"ngInject";` the first statement of your function
 
 
-# Standard rules
+# General rules
 
 
 ## Single Responsibility
