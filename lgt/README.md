@@ -32,6 +32,50 @@ Rules which are not based on the guide by john_papa should contain an explanatio
 # Custom Conventions
 ## Naming
   **input** discuss global naming rules
+  - Modules, Filter, Handler and Services should be prefixed with **sb** to prevent naming clashes with 3rd party libs
+
+### View
+| part | rule |
+| ---- | ---- |
+| Folder | ${name} |
+| Controller File | ${name}-controller.js |
+| Controller Name | ${name}Controller |
+| Template File | ${name}.tpl.html |
+
+#### App View
+| part | rule |
+| ---- | ---- |
+| Folder | app-state |
+| State Name | app |
+| Controller | AppStateController |
+
+### Module
+  Prefix with **sb**
+
+### Directive
+  Prefix with **sb**
+
+| part | rule |
+| ---- | ---- |
+| Directive name | sb${name} |
+| Folder | sb${name} |
+| File | index.js (or ${name}.js) |
+
+### Service
+  Prefix with **sb**
+
+| part | rule |
+| ---- | ---- |
+| File name | sb-${name}-service.js |
+| Angular name | sb${name}Service |
+
+### Filter, Handler
+  Prefix with **sb**
+
+| part | rule |
+| ---- | ---- |
+| File name | sb-${name}-filter.js, sb-${name}-handler.js |
+| Angular name | sb${name} |
 
 
 ## Files
@@ -40,11 +84,11 @@ Rules which are not based on the guide by john_papa should contain an explanatio
   - Put directives, controllers, components, services, .... in a single file. Do not combine multiple aspects in one file.
 
 ## AFP Components
-  - Define the dependency as angular.module('app', ['afp-widgets'] ) without any `require('afp-widgets')`
+  - Define the dependency as angular.module('app', ['afp-widgets'] ) without any `require('afp-widgets')`.
   - Include the `global-loader.js` in your banklet
   
-  *Why?* The AFP components have an very large dependency tree and are used everywhere. We placed the commonly-used modules in `global.js` and load it using the `global-loader.js`
-  Since we cannot control the webpack build (yet), simply do not reference it with `require()`.
+  *Why?* The AFP components have an very large dependency tree and are used everywhere. To reduce the request sizes, we placed the commonly-used modules in `global.js` and load it using the `global-loader.js`
+  Since we cannot control the webpack build (yet), simply do not reference it with `require()` in your banklet code.
 
 ## Webpack
 ### Atomic files
@@ -111,7 +155,7 @@ Rules which are not based on the guide by john_papa should contain an explanatio
 
 #### Definitions [Style [Y021](//github.com/johnpapa/angular-styleguide/tree/master/a1#style-y021)],  [Style [Y022](//github.com/johnpapa/angular-styleguide/tree/master/a1#style-y022)] and [Style [Y023](//github.com/johnpapa/angular-styleguide/tree/master/a1#style-y023)]
 
-  - Declare modules once (in index.js) without a variable using the setter syntax. Use the getter syntax in partials.
+  - Declare modules once (in index.js) without an variable using the setter syntax. Use the getter syntax in partials.
   - When using a module, avoid using a variable and instead use chaining with the getter syntax.
 
   ```javascript
